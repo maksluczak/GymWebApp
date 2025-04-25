@@ -1,9 +1,19 @@
 const Country = require('../models/Country');
+const { getCitiesInCountry } = require('../services/countryService');
 
 const getAllCountries = async (req, res) => {
     const countries = await Country.find();
     if (!countries) return res.status(200).json({ message: 'no country found' });
     return res.json(countries);
+};
+
+const getCountryCities = async (req, res) => {
+    try {
+        const cities = await getCitiesInCountry(req.params.id);
+        res.json(cities);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 };
 
 const createCountry = async (req, res) => {
@@ -53,6 +63,7 @@ const deleteCountry = async (req, res) => {
 
 module.exports = {
     getAllCountries,
+    getCountryCities,
     createCountry,
     updateCountry,
     deleteCountry
