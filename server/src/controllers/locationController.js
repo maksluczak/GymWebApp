@@ -38,6 +38,26 @@ const getLocationByCity = async (req, res) => {
     }
 };
 
+const getLocations = async (req, res) => {
+    try {
+        const { country, city } = req.params;
+        if (!country || !city) {
+            return res.status(400).json({ message: 'country and city is required'} );
+        }
+        const filer = {}
+        if (country) filer.country = country;
+        if (city) filer.city = city;
+
+        const locations = await Location.find(filer).exec()
+        if (!locations.length) {
+            return res.status(404).json({ message: 'no locations found for this country and city' });
+        }
+        return res.json(locations);
+    } catch (err) {
+        return res.status(404).json({ error: err.message });
+    }
+};
+
 const createLocation = async (req, res) => {
     if(!req?.body?.country || !req?.body?.city) return res.status(400).json({ message: 'country and city are required' });
     try {
@@ -89,6 +109,7 @@ module.exports = {
     getAllLocations,
     getLocationByCountry,
     getLocationByCity,
+    getLocations,
     createLocation,
     updateLocation,
     deleteLocation
