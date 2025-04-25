@@ -4,27 +4,27 @@ const Schema = mongoose.Schema;
 const workoutSchema = new Schema({
     name: {
         type: String,
-        require: true
+        required: true
     },
     weekday: {
         type: String,
         enum: ['Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota', 'Niedziela'],
-        require: true
+        required: true
     },
     hour: {
         type: String,
         match: /^([01]\d|2[0-3]):([0-5]\d)$/,
-        require: true
+        required: true
     },
     gym: {
         type: Schema.Types.ObjectId,
         ref: 'Gym',
-        require: true
+        required: true
     },
     trainer: {
         type: Schema.Types.ObjectId,
         ref: 'Trainer',
-        require: true
+        required: true
     },
     users: [{
         type: Schema.Types.ObjectId,

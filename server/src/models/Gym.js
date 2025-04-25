@@ -4,12 +4,16 @@ const Schema = mongoose.Schema;
 const gymSchema = new Schema({
     name: {
         type: String,
-        require: true
+        required: true
+    },
+    address: {
+        type: String,
+        required:true
     },
     location: {
         type: Schema.Types.ObjectId,
         ref: 'Location',
-        require: true
+        required: true
     }
 });
 

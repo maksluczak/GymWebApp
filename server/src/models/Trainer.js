@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const trainerSchema = new Schema({
     firstname: {
         type: String,
-        require: true
+        required: true
     },
     lastname: {
         type: String,
@@ -12,7 +12,7 @@ const trainerSchema = new Schema({
     },
     age: {
         type: Number,
-        require: true
+        required: true
     },
     specialization: {
         type: String

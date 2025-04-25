@@ -4,16 +4,16 @@ const Schema = mongoose.Schema;
 const productSchema = new Schema({
     name: {
         type: String,
-        require: true
+        required: true
     },
     price: {
         type: Number,
-        require: true
+        required: true
     },
     gym: {
         type: Schema.Types.ObjectId,
         ref: 'Gym',
-        require: true
+        required: true
     }
 });
 
