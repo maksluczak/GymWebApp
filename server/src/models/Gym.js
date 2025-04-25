@@ -8,13 +8,21 @@ const gymSchema = new Schema({
     },
     address: {
         type: String,
-        required:true
-    },
-    location: {
-        type: Schema.Types.ObjectId,
-        ref: 'Location',
         required: true
-    }
+    },
+    city: {
+        type: Schema.Types.ObjectId,
+        ref: 'City',
+        required: true
+    }, 
+    workouts: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Workout'
+    }],
+    products: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Product'
+    }]
 });
 
 module.exports = mongoose.model('Gym', gymSchema);

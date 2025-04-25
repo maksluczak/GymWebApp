@@ -16,7 +16,11 @@ const trainerSchema = new Schema({
     },
     specialization: {
         type: String
-    }
+    },
+    workouts: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Workout'
+    }]
 });
 
 module.exports = mongoose.model('Trainer', trainerSchema);
