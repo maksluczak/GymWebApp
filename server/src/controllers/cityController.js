@@ -33,7 +33,7 @@ const deleteCity = async (req, res) => {
     }
 };
 
-const getCityGyms = async (req, res) => {
+const getAllGymsInCity = async (req, res) => {
     try {
         const gyms = await getGymsInCity(req.params.id);
         res.json(gyms);
@@ -46,5 +46,5 @@ module.exports = {
     createCity,
     updateCity,
     deleteCity,
-    getCityGyms
+    getAllGymsInCity
 }

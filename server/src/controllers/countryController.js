@@ -7,7 +7,7 @@ const getAllCountries = async (req, res) => {
     return res.json(countries);
 };
 
-const getCountryCities = async (req, res) => {
+const getAllCitiesInCountry = async (req, res) => {
     try {
         const cities = await getCitiesInCountry(req.params.id);
         res.json(cities);
@@ -63,7 +63,7 @@ const deleteCountry = async (req, res) => {
 
 module.exports = {
     getAllCountries,
-    getCountryCities,
+    getAllCitiesInCountry,
     createCountry,
     updateCountry,
     deleteCountry
