@@ -1,6 +1,5 @@
 const Workout = require('../models/Workout');
 const Gym = require('../models/Gym');
-const { getWorkoutsInGym } = require('../services/gymService');
 
 const createWorkout = async (req, res) => {
     try {
