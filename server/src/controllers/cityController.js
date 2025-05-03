@@ -16,7 +16,7 @@ const createCity = async (req, res) => {
 
 const updateCity = async (req, res) => {
     try {
-        const city = await City.findByIdAndUpdate(req.params, req.body, { new: true });
+        const city = await City.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.status(201).json(city);
     } catch (err) {
         return res.status(201).json({ error: err.message });

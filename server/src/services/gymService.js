@@ -7,7 +7,7 @@ const getWorkoutsInGym = async (gymId) => {
 };
 
 const getProductsInGym = async (gymId) => {
-    const products = await Products.find({ gym: gymId });
+    const products = await Product.find({ gym: gymId });
     return products;
 }
 

@@ -31,7 +31,7 @@ const createCountry = async (req, res) => {
 const updateCountry = async (req, res) => {
     try {
         if (!req?.body?.id) {
-            return res.status(400).json({ 'message': 'ID is required' });
+            return res.status(400).json({ message: 'ID is required' });
         }
         const country = await Country.findOne({ _id: req.body.id }).exec();
         if (!country) {
@@ -48,7 +48,7 @@ const updateCountry = async (req, res) => {
 const deleteCountry = async (req, res) => {
     try {
         if (!req?.body?.id) {
-            return res.status(400).json({ 'message': 'ID is required' });
+            return res.status(400).json({ message: 'ID is required' });
         }
         const country = await Country.findOne({ _id: req.body.id }).exec();
         if (!country) {
