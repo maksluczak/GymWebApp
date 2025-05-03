@@ -1,4 +1,4 @@
-const City = require('../models/User');
+const City = require('../models/City');
 const Country = require('../models/Country');
 const { getGymsInCity } = require('../services/cityService');
 
@@ -7,7 +7,7 @@ const createCity = async (req, res) => {
         const city = new City(req.body);
         await city.save();
 
-        await City.findByIdAndUpdate(city.country, { $push: { cities: city._id }});
+        await Country.findByIdAndUpdate(city.country, { $push: { cities: city._id }});
         res.status(201).json(city);
     } catch (err) {
         return res.status(400).json({ error: err.message });

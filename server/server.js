@@ -11,6 +11,7 @@ connectDB();
 const PORT = process.env.PORT || 8080;
 
 const server = express();
+server.use(express.json());
 
 server.use('/city', cityRoutes);
 server.use('/country', countryRoutes);
