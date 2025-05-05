@@ -3,16 +3,13 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const connectDB = require('./config/db');
-
-const cityRoutes = require('./src/routes/cityRoutes');
-const countryRoutes = require('./src/routes/countryRoutes');
+const routes = require('./src/routes')
 
 connectDB();
 
 const app = express();
 app.use(express.json());
 
-app.use('/city', cityRoutes);
-app.use('/country', countryRoutes);
+app.use('/', routes);
 
 module.exports = app;
