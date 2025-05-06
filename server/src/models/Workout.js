@@ -16,6 +16,10 @@ const workoutSchema = new Schema({
         match: /^([01]\d|2[0-3]):([0-5]\d)$/,
         required: true
     },
+    max_people: {
+        type: Number,
+        required: true
+    },
     gym: {
         type: Schema.Types.ObjectId,
         ref: 'Gym',

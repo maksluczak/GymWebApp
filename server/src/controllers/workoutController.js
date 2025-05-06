@@ -1,5 +1,6 @@
 const Workout = require('../models/Workout');
 const Gym = require('../models/Gym');
+const User = require('../models/User');
 
 const createWorkout = async (req, res) => {
     try {
@@ -31,8 +32,34 @@ const deleteWorkout = async (req, res) => {
     }
 };
 
+const handleNewUserOnWorkout = async (req, res) => {
+    try {
+        const { email, workoutId } = req.body;
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(401).json({ message: "User does not exist." });
+        }
+        const workout = await Workout.findById(workoutId);
+
+        if (!workout) {
+            return res.status(404).json({ message: "Workout not found." });
+        }   
+        
+        if (workout.users.includes(user._id)) {
+            return res.status(400).json({ message: "User already signed up for the training." });
+        }
+
+        await Workout.findByIdAndUpdate(workoutId, { $push: { users: user._id }});
+        await User.findByIdAndUpdate(user._id, { $push: { workouts: workoutId }});
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+};
+
 module.exports = {
     createWorkout,
     updateWorkout,
-    deleteWorkout
+    deleteWorkout,
+    handleNewUserOnWorkout
 }
