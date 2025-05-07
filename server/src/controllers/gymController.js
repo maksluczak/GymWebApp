@@ -8,6 +8,7 @@ const createGym = async (req, res) => {
         await gym.save();
 
         await City.findByIdAndUpdate(gym.city, { $push: { gyms: gym._id } });
+        return res.status(201).json(gym);
     } catch (err) {
         return res.status(400).json({ error: err.message });
     }
@@ -24,9 +25,12 @@ const updateGym = async (req, res) => {
 
 const deleteGym = async (req, res) => {
     try {
-        const result = await Gym.findByIdAndDelete(req.params.id);
-        await City.findByIdAndUpdate(result.city, { $pull: { gyms: result._id }});
-        return res.status(201).json(result);
+        const gym = await Gym.findById(req.params.id);
+        if (!gym) return res.status(404).json({ message: 'Gym not found' });
+
+        await Gym.findByIdAndDelete(req.params.id);
+        await City.findByIdAndUpdate(gym.city, { $pull: { gyms: gym._id }});
+        return res.status(200).json({ message: 'Gym deleted' });
     } catch (err) {
         return res.status(400).json({ error: err.message });
     }
