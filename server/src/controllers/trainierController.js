@@ -1,6 +1,26 @@
 const Trainer = require('../models/Trainer');
 const Workout = require('../models/Workout');
 
+const getTrainerById = async (req, res) => {
+    try {
+        const trainer = await Trainer.findById(req.params.id).select({
+            firstname: 1,
+            lastname: 1,
+            age: 1,
+            specialization: 1
+        });
+
+        if (!trainer) {
+            return res.status(404).json({ message: "Trainer not found." });
+        }
+
+        res.status(200).json(trainer);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+};
+
+
 const getAllTrainierWorkouts = async (req, res) => {
     try {
         const workouts = await Workout.find({ trainer: req.params.id });
@@ -47,6 +67,7 @@ const deleteTrainier = async (req, res) => {
 };
 
 module.exports = {
+    getTrainerById,
     getAllTrainierWorkouts,
     createTrainier,
     updateTrainier,
