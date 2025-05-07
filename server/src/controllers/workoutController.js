@@ -1,6 +1,7 @@
 const Workout = require('../models/Workout');
 const Gym = require('../models/Gym');
 const User = require('../models/User');
+const { getPeopleInTraining } = require('../services/workoutService');
 
 const createWorkout = async (req, res) => {
     try {
@@ -15,7 +16,7 @@ const createWorkout = async (req, res) => {
 
 const updateWorkout = async (req, res) => {
     try {
-        const gym = await Gym.findByIdAndUpdate(req.params, req.body, { new: true });
+        const gym = await Gym.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.status(201).json(gym);
     } catch (err) {
         res.status(400).json({ error: err.message });
@@ -35,17 +36,22 @@ const deleteWorkout = async (req, res) => {
 const handleNewUserOnWorkout = async (req, res) => {
     try {
         const { email, workoutId } = req.body;
-        const user = await User.findOne({ email });
 
+        const user = await User.findOne({ email });
         if (!user) {
             return res.status(401).json({ message: "User does not exist." });
         }
-        const workout = await Workout.findById(workoutId);
 
+        const workout = await Workout.findById(workoutId);
         if (!workout) {
             return res.status(404).json({ message: "Workout not found." });
         }   
         
+        const peopleOnWorkout = await getPeopleInTraining(workoutId);
+        if (peopleOnWorkout >= workout.max_people) {
+            return res.status(400).json({ message: "No more free seats in workout." });
+        }
+
         if (workout.users.includes(user._id)) {
             return res.status(400).json({ message: "User already signed up for the training." });
         }
