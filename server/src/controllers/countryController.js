@@ -1,10 +1,17 @@
 const Country = require('../models/Country');
 const { getCitiesInCountry } = require('../services/countryService');
+const mongoose = require('mongoose');
 
 const getAllCountries = async (req, res) => {
-    const countries = await Country.find();
-    if (!countries) return res.status(200).json({ message: 'no country found' });
-    return res.json(countries);
+    try {
+        const countries = await Country.find().exec();
+        if (countries.length === 0) {
+            return res.status(404).json({ message: 'No countries found' });
+        }
+        return res.json(countries);
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
 };
 
 const getAllCitiesInCountry = async (req, res) => {
@@ -17,11 +24,11 @@ const getAllCitiesInCountry = async (req, res) => {
 };
 
 const createCountry = async (req, res) => {
-    if(!req?.body?.country) return res.status(400).json({ message: 'country is required' });
+    if (!req?.body?.country) {
+        return res.status(400).json({ message: 'Country is required' });
+    }
     try {
-        const result = await Country.create( {
-            country: req.body.country
-        });
+        const result = await Country.create({ country: req.body.country });
         res.status(201).json(result);
     } catch (err) {
         return res.status(400).json({ error: err.message });
@@ -30,34 +37,30 @@ const createCountry = async (req, res) => {
 
 const updateCountry = async (req, res) => {
     try {
-        if (!req?.body?.id) {
-            return res.status(400).json({ message: 'ID is required' });
-        }
-        const country = await Country.findOne({ _id: req.body.id }).exec();
+        const id = req.params.id;
+        const country = await Country.findById(id).exec();
         if (!country) {
-            return res.status(204).json({ message: 'no matches id' });
+            return res.status(404).json({ message: 'Country not found' });
         }
         if (req.body.country) country.country = req.body.country;
-        const result = await Country.save();
+        const result = await country.save();
         res.json(result);
     } catch (err) {
-        return res.status(404).json({ error: err.message });
+        return res.status(500).json({ error: err.message });
     }
 };
 
 const deleteCountry = async (req, res) => {
     try {
-        if (!req?.body?.id) {
-            return res.status(400).json({ message: 'ID is required' });
-        }
-        const country = await Country.findOne({ _id: req.body.id }).exec();
+        const id = req.params.id;
+        const country = await Country.findById(id).exec();
         if (!country) {
-            return res.status(204).json({ message: 'no matches id' });
+            return res.status(404).json({ message: 'Country not found' });
         }
-        const result = await Country.deleteOne();
+        const result = await Country.deleteOne({ _id: id });
         res.json(result);
     } catch (err) {
-        return res.status(404).json({ error: err.message });
+        return res.status(500).json({ error: err.message });
     }
 };
 
@@ -67,4 +70,4 @@ module.exports = {
     createCountry,
     updateCountry,
     deleteCountry
-}
+};

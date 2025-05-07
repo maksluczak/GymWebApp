@@ -26,7 +26,6 @@ const handleLogin = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
   } catch (err) {
-    console.error(err);
     return res.status(500).json({ message: "Internal server error." });
   }
 };
@@ -56,11 +55,9 @@ const handleNewUser = async (req, res) => {
       password: hashedPwd
     });
 
-    console.log(newUser);
-    res.status(201).json({ message: `New user ${firstname} ${lastname} created!` });
+    return res.status(201).json({ message: `New user ${firstname} ${lastname} created!` });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "An error occurred during registration." });
+    return res.status(500).json({ message: "An error occurred during registration." });
   }
 };
 

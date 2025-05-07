@@ -2,9 +2,13 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 
 const getAllUsers = async (req, res) => {
-  const users = await User.find();
-  if (!users) return res.status(204).json({ 'message': 'no users found' });
-  res.json(users);
+  try {
+    const users = await User.find();
+    if (!users) return res.status(204).json({ 'message': 'no users found' });
+    return res.json(users);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
+  }
 };
 
 const getUserById = async (req, res) => {
@@ -16,9 +20,9 @@ const getUserById = async (req, res) => {
     if (!user) {
       return res.status(204).json({ 'message': 'no user matches id' });
     }
-    res.json(user);
-  } catch (error) {
-    res.status(404).json({ error: error.message });
+    return res.json(user);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
   }
 };
 
@@ -34,9 +38,9 @@ const createUser = async (req, res) => {
       email: req.body.email,
       password: hashedPwd
     });
-    res.status(201).json(result);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
+    return res.status(201).json(result);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
   }
 };
 
@@ -56,9 +60,9 @@ const updateUser = async (req, res) => {
         user.password = await bcrypt.hash(req.body.password, 10);
     }
     const result = await user.save();
-    res.json(result);
-  } catch (error) {
-    res.status(404).json({ error: error.message });
+    return res.json(result);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
   }
 };
 
@@ -72,9 +76,9 @@ const deleteUser = async (req, res) => {
       return res.status(204).json({ 'message': 'no user matches id' });
     }
     const result = await user.deleteOne({ _id: req.body.id });
-    res.json(result);
-  } catch (error) {
-    res.status(404).json({ error: error.message });
+    return res.json(result);
+  } catch (err) {
+    return res.status(404).json({ error: err.message });
   }
 };
 

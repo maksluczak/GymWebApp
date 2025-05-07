@@ -9,33 +9,41 @@ const createWorkout = async (req, res) => {
         await workout.save();
 
         await Gym.findByIdAndUpdate(workout.gym, { $push: { workouts: workout._id }});
+        return res.status(201).json(workout);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        return res.status(400).json({ error: err.message });
     }
 };
 
 const updateWorkout = async (req, res) => {
     try {
-        const gym = await Gym.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.status(201).json(gym);
+        const workout = await Workout.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!workout) return res.status(404).json({ message: 'Workout not found' });
+        return res.status(200).json(workout);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        return res.status(400).json({ error: err.message });
     }
 };
 
 const deleteWorkout = async (req, res) => {
     try {
-        const result = await Gym.findByIdAndDelete(req.params.id);
-        await City.findByIdAndUpdate(gym.city, { $pull: { gyms: gym._id }});
-        res.status(201).json(result);
+        const workout = await Workout.findById(req.params.id);
+        if (!workout) return res.status(404).json({ message: 'Workout not found' });
+
+        await Workout.findByIdAndDelete(req.params.id);
+        await Gym.findByIdAndUpdate(workout.gym, { $pull: { workouts: workout._id }});
+        return res.status(200).json({ message: 'Workout deleted' });
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        return res.status(400).json({ error: err.message });
     }
 };
 
 const handleNewUserOnWorkout = async (req, res) => {
     try {
         const { email, workoutId } = req.body;
+        if (!email || !workoutId) {
+            return res.status(400).json({ message: 'Email and workoutId are required.' });
+        }
 
         const user = await User.findOne({ email });
         if (!user) {
@@ -58,8 +66,9 @@ const handleNewUserOnWorkout = async (req, res) => {
 
         await Workout.findByIdAndUpdate(workoutId, { $push: { users: user._id }});
         await User.findByIdAndUpdate(user._id, { $push: { workouts: workoutId }});
+        return res.status(200).json({ message: 'User successfully signed up for workout.' });
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        return res.status(400).json({ error: err.message });
     }
 };
 

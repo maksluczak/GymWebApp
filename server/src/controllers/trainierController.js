@@ -14,9 +14,9 @@ const getTrainerById = async (req, res) => {
             return res.status(404).json({ message: "Trainer not found." });
         }
 
-        res.status(200).json(trainer);
+        return res.status(200).json(trainer);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        return res.status(400).json({ error: err.message });
     }
 };
 
@@ -24,9 +24,9 @@ const getTrainerById = async (req, res) => {
 const getAllTrainierWorkouts = async (req, res) => {
     try {
         const workouts = await Workout.find({ trainer: req.params.id });
-        res.json(workouts);
+        return res.json(workouts);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        return res.status(400).json({ error: err.message });
     }
 };
 
@@ -38,18 +38,18 @@ const createTrainier = async (req, res) => {
             age: req.body.age,
             specialization: req.body.specialization
         });
-        res.status(201).json(result);
+        return res.status(201).json(result);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        return res.status(400).json({ error: err.message });
     }
 };
 
 const updateTrainier = async (req, res) => {
     try {
         const trainer = await Trainer.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.status(200).json(trainer);
+        return res.status(200).json(trainer);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        return res.status(400).json({ error: err.message });
     }
 };
 
@@ -60,9 +60,9 @@ const deleteTrainier = async (req, res) => {
             return res.status(404).json({ message: 'No trainer found with this ID.' });
         }
         const result = await Trainer.deleteOne({ _id: trainer._id });
-        res.json(result);
+        return res.json(result);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        return res.status(400).json({ error: err.message });
     }
 };
 
