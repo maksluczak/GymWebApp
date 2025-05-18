@@ -7,12 +7,12 @@ export default function Nav() {
       <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
 
         <div className="text-2xl font-bold text-purple-700">GymWebApp</div>
-        
+
         <ul className="md:flex space-x-8">
           <li>
             <a
-              href="#"
-              className="text-purple-700 font-medium hover:text-purple-900 transition"
+              href="/"
+              className="text-gray-700 font-medium hover:text-purple-700 transition"
             >
               Home
             </a>
@@ -20,7 +20,7 @@ export default function Nav() {
           <li>
             <a
               href="/register"
-              className="text-gray-700 hover:text-purple-700 transition"
+              className="text-gray-700 font-medium hover:text-purple-700 transition"
             >
               Register
             </a>
@@ -28,7 +28,7 @@ export default function Nav() {
           <li>
             <a
               href="/login"
-              className="text-gray-700 hover:text-purple-700 transition"
+              className="text-gray-700 font-medium hover:text-purple-700 transition"
             >
               Login
             </a>
