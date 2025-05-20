@@ -1,13 +1,15 @@
 'use client';
+import { useUser } from '../../context/userContext';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function Login() {
+    const { setUser } = useUser();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const router = useRouter();
 
-    const handleSubmit = async (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
 
         if (!email.includes('@')) {
@@ -20,9 +22,24 @@ export default function Login() {
             return;
         }
 
-        console.log({ email, password });
+        try {
+            const res = await fetch('http://localhost:8080/auth/login', {
+                method: 'POST',
+                body: JSON.stringify({ email, password }),
+                headers: { 'Content-Type': 'application/json' },
+            });
 
-        router.push('/country');
+            const data = await res.json();
+
+            if (res.ok) {
+                setUser( { email: data.user.email, id: data.user._id });
+                router.push('/country');
+            } else {
+                alert('Błąd logowania');
+            }
+        } catch (err) {
+            alert(`Error: ${err}`);
+        }
     }
 
     return (
@@ -32,7 +49,7 @@ export default function Login() {
                 <h1 className="text-xl font-bold leading-tight tracking-tight text-purple-700 md:text-2xl">
                     Sign in to your account
                 </h1>
-                <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+                <form onSubmit={handleLogin} className="space-y-4 md:space-y-6">
                     <div>
                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-purple-700">Your email</label>
                         <input

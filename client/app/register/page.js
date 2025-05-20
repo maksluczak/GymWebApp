@@ -9,7 +9,7 @@ export default function Register() {
     const [password, setPassword] = useState('');
     const router = useRouter();
 
-    const handleSubmit = async (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
 
         if (!email.includes('@')) {
@@ -22,9 +22,22 @@ export default function Register() {
             return;
         }
 
-        console.log({ firstname, lastname, email, password });
+        try {
+            const res = await fetch('http://localhost:8080/auth/register', {
+                method: 'POST',
+                body: JSON.stringify({ firstname, lastname, email, password }),
+                headers: { 'Content-Type': 'application/json' },
+            });
+            const data = await res.json();
 
-        router.push('/login');
+            if (res.ok) {
+                router.push('/login');
+            } else {
+                alert('Błąd rejestracji');
+            }
+        } catch (err) {
+            alert(`Error: ${err}`);
+        }
     }
 
     return (
@@ -34,7 +47,7 @@ export default function Register() {
                 <h1 className="text-xl font-bold leading-tight tracking-tight text-purple-700 md:text-2xl">
                     Sign up your account
                 </h1>
-                <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+                <form onSubmit={handleRegister} className="space-y-4 md:space-y-6">
                     <div>
                         <label htmlFor="firstname" className="block mb-2 text-sm font-medium text-purple-700">Firstname</label>
                         <input 

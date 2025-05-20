@@ -1,4 +1,5 @@
 import Nav from  '../components/nav/Nav';
+import { UserProvider } from '../context/userContext';
 import './globals.css';
 
 export const metadata = {
@@ -12,7 +13,9 @@ export default function RootLayout({ children }) {
         <body>
           <Nav />
           <main className="body-spacing ">
-            {children}
+            <UserProvider>
+              {children}
+            </UserProvider>
           </main>
         </body>
       </html>
