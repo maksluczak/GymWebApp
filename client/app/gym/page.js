@@ -26,21 +26,23 @@ export default function GymPage() {
         fetchGyms();
     }, [cityId]);
 
+    const handleGymClick = (id) => {
+        router.push(`/dashboard?id=${id}`);
+    };
+
     return (
-        <section className='flex items-center justify-center'>
-            <div className='p-6 space-y-4 md:space-y-6 sm:p-8'>
-                <h1 className="text-2xl font-bold mb-4">Siłownie</h1>
-                <ul className='list-disc pl-5 space-y-1'>
-                    {gyms.map((gym) => (
-                        <li
-                            key={gym._id}
-                            className="hover:underline cursor-pointer"
-                        >
-                            {gym.name}
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        </section>
+        <main className='pt-20'>
+            <ul className='list-disc pl-5 space-y-1'>
+                {gyms.map((gym) => (
+                    <li
+                        key={gym._id}
+                        onClick={() => handleGymClick(gym._id)}
+                        className="hover:underline cursor-pointer"
+                    >
+                        {gym.name}
+                    </li>
+                ))}
+            </ul>
+        </main>
     );
 }

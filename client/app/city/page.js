@@ -31,8 +31,7 @@ export default function CityPage() {
     }
 
     return (
-        <div className="p-8">
-            <h1 className="text-2xl font-bold mb-4">Miasta w kraju</h1>
+        <main className="pt-20">
             <ul className="list-disc pl-5 space-y-1">
                 {cities.map((city) => (
                 <li 
@@ -44,6 +43,6 @@ export default function CityPage() {
                 </li>
                 ))}
             </ul>
-        </div>
+        </main>
     );
 }

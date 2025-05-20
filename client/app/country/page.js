@@ -26,10 +26,8 @@ export default function CountryPage() {
     };
 
     return (
-        <main className="p-8 max-w-xl mx-auto">
-            <h1 className="text-2xl font-bold mb-4">Lista krajów</h1>
-
-            <ul className="list-disc pl-5 mb-6 space-y-1">
+        <main className="pt-20">
+            <ul className="list-disc pl-5 space-y-1">
                 {countries.map((c) => (
                 <li
                 key={c._id}
