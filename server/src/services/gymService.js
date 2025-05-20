@@ -2,7 +2,7 @@ const Workout = require('../models/Workout');
 const Product = require('../models/Product');
 
 const getWorkoutsInGym = async (gymId) => {
-    const workouts = await Workout.find({ gym: gymId });
+    const workouts = await Workout.find({ gym: gymId }).populate('trainer');
     return workouts;
 };
 
