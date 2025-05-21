@@ -97,10 +97,37 @@ const getAllUserWorkouts = async (req, res) => {
   }
 };
 
+const handleUserOutOfWorkout = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { workoutId } = req.body;
+    if (!userId || !workoutId) {
+      return res.status(400).json({ message: 'User and workout IDs are required.' });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(401).json({ message: "User does not exist." });
+    }
+
+    const workout = await Workout.findById(workoutId);
+    if (!workout) {
+      return res.status(401).json({ message: "Workout not found." });
+    }
+
+    await Workout.findByIdAndUpdate(workoutId, { $pull: { users: user._id } });
+    await User.findByIdAndUpdate(userId, { $pull: { workouts: workout._id } });
+    return res.status(200).json({ message: "User successfully signed out of the workout." });
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+}
+
 module.exports = {
   getAllUsers,
   getUserById,
   getAllUserWorkouts,
+  handleUserOutOfWorkout,
   createUser,
   updateUser,
   deleteUser,
