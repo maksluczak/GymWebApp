@@ -103,7 +103,7 @@ export default function Dashboard() {
                             people: {workout.users?.length} / {workout.max_people} <br/>
                             <button 
                             onClick={() => handleSignUpForWorkout(workout._id) }
-                            className='text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2'>
+                            className='text-white bg-purple-600 hover:bg-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2'>
                                 SignUp
                             </button>
                             </li>
@@ -124,7 +124,7 @@ export default function Dashboard() {
                             hour: {userWorkout.hour} <br/>
                             <button 
                             onClick={() => handleSignOutFromWorkout(userWorkout._id) }
-                            className='text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2'>
+                            className='text-white bg-purple-600 hover:bg-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2'>
                                 SignOut
                             </button>
                             </li>
