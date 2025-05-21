@@ -40,7 +40,8 @@ const deleteWorkout = async (req, res) => {
 
 const handleNewUserOnWorkout = async (req, res) => {
     try {
-        const { email, workoutId } = req.body;
+        const { email } = req.body;
+        const workoutId = req.params.id;
         if (!email || !workoutId) {
             return res.status(400).json({ message: 'Email and workoutId are required.' });
         }
