@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from 'next/navigation';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '../../context/userContext';
 
@@ -17,36 +17,54 @@ export default function Dashboard() {
 
     console.log(user);
 
+    const fetchWorkouts = async () => {
+        try {
+            const res = await fetch(`http://localhost:8080/gym/${gymId}/workouts`);
+            if (!res.ok) throw new Error(`HTTP error! ${res.status}`);
+            const data = await res.json();
+            setWorkouts(data);
+        } catch (err) {
+            alert(`Error: ${err}`);
+        }
+    };
+
+    const fetchUserWorkouts = async () => {
+        try {
+            const res = await fetch(`http://localhost:8080/user/${user.id}/workouts`);
+            if (!res.ok) throw new Error(`HTTP error! ${res.status}`);
+            const data = await res.json();
+            setUserWorkouts(data);
+        } catch (err) {
+            alert(`Error: ${err}`);
+        }
+    };
+
     useEffect(() => {
-        const fetchWorkouts = async () => {
-            try {
-                const res = await fetch(`http://localhost:8080/gym/${gymId}/workouts`);
-                if (!res.ok) throw new Error(`HTTP error! ${res.status}`);
-                const data = await res.json();
-                setWorkouts(data);
-            } catch (err) {
-                alert(`Error: ${err}`);
-            }
-        };
-
-        const fetchUserWorkouts = async () => {
-            try {
-                const res = await fetch(`http://localhost:8080/user/${user.id}/workouts`);
-                if (!res.ok) throw new Error(`HTTP error! ${res.status}`);
-                const data = await res.json();
-                setUserWorkouts(data);
-            } catch (err) {
-                alert(`Error: ${err}`);
-            }
-        };
-
         if (gymId && user?.id) {
             fetchWorkouts();
             fetchUserWorkouts();
         }
     }, [gymId, user]);
 
-    console.log(user);
+    const handleSignUpForWorkout = async (workoutId) => {
+        try {
+            const res = await fetch(`http://localhost:8080/workout/${workoutId}/signup`, {
+                method: 'POST',
+                body: JSON.stringify({ email: user.email }),
+                headers: { 'Content-Type': 'application/json' },
+            });
+            
+            if (res.ok) {
+                console.log('User successfully signed up for workout');
+                await fetchUserWorkouts();
+                await fetchWorkouts();
+            } else {
+                if (!res.ok) throw new Error(`HTTP error! ${res.status}`);
+            }
+        } catch (err) {
+            alert(`Error: ${err}`);
+        }
+    };
     
     return (
         <main className='pt-20'>
@@ -65,8 +83,14 @@ export default function Dashboard() {
                             weekday: {workout.weekday} <br/>
                             hour: {workout.hour} <br/>
                             people: {workout.users?.length} / {workout.max_people} <br/>
+                            <button 
+                            onClick={() => handleSignUpForWorkout(workout._id) }
+                            className='text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2'>
+                                SignUp
+                            </button>
                             </li>
                         ))}
+                        
                     </ul>
                 </div>
                 <div className='absolute top-0 left-1/2 p-5'>
