@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '../../context/userContext';
 
@@ -13,21 +13,38 @@ export default function Dashboard() {
     const router = useRouter();
 
     const [workouts, setWorkouts] = useState([]);
+    const [userWorkouts, setUserWorkouts] = useState([]);
+
+    console.log(user);
 
     useEffect(() => {
         const fetchWorkouts = async () => {
             try {
                 const res = await fetch(`http://localhost:8080/gym/${gymId}/workouts`);
+                if (!res.ok) throw new Error(`HTTP error! ${res.status}`);
                 const data = await res.json();
                 setWorkouts(data);
             } catch (err) {
                 alert(`Error: ${err}`);
             }
-        }
-        if (gymId) {
+        };
+
+        const fetchUserWorkouts = async () => {
+            try {
+                const res = await fetch(`http://localhost:8080/user/${user.id}/workouts`);
+                if (!res.ok) throw new Error(`HTTP error! ${res.status}`);
+                const data = await res.json();
+                setUserWorkouts(data);
+            } catch (err) {
+                alert(`Error: ${err}`);
+            }
+        };
+
+        if (gymId && user?.id) {
             fetchWorkouts();
+            fetchUserWorkouts();
         }
-    }, [gymId]);
+    }, [gymId, user]);
 
     console.log(user);
     
@@ -53,7 +70,19 @@ export default function Dashboard() {
                     </ul>
                 </div>
                 <div className='absolute top-0 left-1/2 p-5'>
-                    
+                    <ul className='list-disc space-y-1'>
+                        {userWorkouts.map((userWorkout) => (
+                            <li
+                            key={userWorkout._id}
+                            >
+                            gym: {userWorkout.gym?.name} <br/>
+                            name: {userWorkout.name} <br/>
+                            trainer: {userWorkout.trainer?.firstname} {userWorkout.trainer?.lastname} <br/>
+                            weekday: {userWorkout.weekday} <br/>
+                            hour: {userWorkout.hour} <br/>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </section>
         </main>
