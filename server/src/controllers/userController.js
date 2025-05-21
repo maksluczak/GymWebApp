@@ -99,8 +99,7 @@ const getAllUserWorkouts = async (req, res) => {
 
 const handleUserOutOfWorkout = async (req, res) => {
   try {
-    const userId = req.params.id;
-    const { workoutId } = req.body;
+    const { userId, workoutId } = req.params;
     if (!userId || !workoutId) {
       return res.status(400).json({ message: 'User and workout IDs are required.' });
     }
