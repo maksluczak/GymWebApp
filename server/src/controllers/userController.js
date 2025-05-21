@@ -1,10 +1,13 @@
 const User = require('../models/User');
+const Workout = require('../models/Workout');
 const bcrypt = require('bcrypt');
 
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.find();
-    if (!users) return res.status(204).json({ 'message': 'no users found' });
+    if (users.length === 0) {
+      return res.status(204).json({ message: 'No users found' });
+    }    
     return res.json(users);
   } catch (err) {
     return res.status(404).json({ error: err.message });
@@ -16,7 +19,7 @@ const getUserById = async (req, res) => {
     if (!req?.params?.id) {
       return res.status(400).json({ 'message': 'ID is required' });
     }
-    const user = await User.findOne({ _id: req.params.id }).exec();
+    const user = await User.findById(req.params.id).exec();
     if (!user) {
       return res.status(204).json({ 'message': 'no user matches id' });
     }
@@ -49,7 +52,7 @@ const updateUser = async (req, res) => {
     if (!req?.body?.id) {
       return res.status(400).json({ 'message': 'ID is required' });
     }
-    const user = await User.findOne({ _id: req.body.id }).exec();
+    const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(204).json({ 'message': 'no user matches id' });
     }
@@ -75,16 +78,29 @@ const deleteUser = async (req, res) => {
     if (!user) {
       return res.status(204).json({ 'message': 'no user matches id' });
     }
-    const result = await user.deleteOne({ _id: req.body.id });
+    const result = await user.deleteOne();
     return res.json(result);
   } catch (err) {
     return res.status(404).json({ error: err.message });
   }
 };
 
+const getAllUserWorkouts = async (req, res) => {
+  try {
+    const workouts = await Workout.find({ users: req.params.id })
+      .populate('trainer')
+      .populate('gym');
+
+    return res.json(workouts);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+};
+
 module.exports = {
   getAllUsers,
   getUserById,
+  getAllUserWorkouts,
   createUser,
   updateUser,
   deleteUser,
