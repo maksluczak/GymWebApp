@@ -8,7 +8,7 @@ router.get('/:id', userRoutes.getUserById);
 router.get('/:id/workouts', userRoutes.getAllUserWorkouts);
 router.post('/', userRoutes.createUser);
 router.put('/:id', userRoutes.updateUser);
-router.delete('/:id/workout/:id', userRoutes.handleUserOutOfWorkout);
+router.delete('/:userId/workout/:workoutId', userRoutes.handleUserOutOfWorkout);
 router.delete('/:id', userRoutes.deleteUser);
 
 module.exports = router;
