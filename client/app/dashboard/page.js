@@ -65,6 +65,24 @@ export default function Dashboard() {
             alert(`Error: ${err}`);
         }
     };
+
+    const handleSignOutFromWorkout = async (workoutId) => {
+        try {
+            const res = await fetch(`http://localhost:8080/user/${user.id}/workout/${workoutId}`, {
+                method: 'DELETE',
+            });
+
+            if (res.ok) {
+                console.log('User successfully signed out from workout');
+                await fetchUserWorkouts();
+                await fetchWorkouts();
+            } else {
+                if (!res.ok) throw new Error(`HTTP error! ${res.status}`);
+            }
+        } catch (err) {
+            alert(`Error: ${err}`);
+        }
+    };
     
     return (
         <main className='pt-20'>
@@ -104,12 +122,16 @@ export default function Dashboard() {
                             trainer: {userWorkout.trainer?.firstname} {userWorkout.trainer?.lastname} <br/>
                             weekday: {userWorkout.weekday} <br/>
                             hour: {userWorkout.hour} <br/>
+                            <button 
+                            onClick={() => handleSignOutFromWorkout(userWorkout._id) }
+                            className='text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2'>
+                                SignOut
+                            </button>
                             </li>
                         ))}
                     </ul>
                 </div>
             </section>
         </main>
-
     )
 }
