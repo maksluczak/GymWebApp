@@ -83,12 +83,22 @@ export default function Dashboard() {
             alert(`Error: ${err}`);
         }
     };
+
+    const handleProductClick = () => {
+        router.push(`/product?id=${gymId}`);
+    };
     
     return (
         <main className='pt-20'>
             <h1 className='text-4xl text-black pl-5 pb-5'>
                 Hello from dashboard!
             </h1>
+            <button
+                onClick={() => handleProductClick()}
+                className='bg-purple-700 text-white px-4 py-2 rounded-full font-medium hover:bg-purple-800'
+            >
+                Gym Products
+            </button>
             <section className='relative min-h-screen bg-white'>
                 <div className='flex absolute top-0 left-0 p-5'>
                     <ul className='list-disc space-y-1'>

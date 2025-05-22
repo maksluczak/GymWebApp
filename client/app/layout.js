@@ -11,12 +11,15 @@ export default function RootLayout({ children }) {
     return (
       <html lang="en">
         <body>
-          <Nav />
-          <main className="body-spacing ">
+          {/* <Nav />
+          <main className="body-spacing "> */}
             <UserProvider>
-              {children}
+              <Nav />
+              <main className="body-spacing ">
+                {children}
+              </main>
             </UserProvider>
-          </main>
+          {/* </main> */}
         </body>
       </html>
     )
