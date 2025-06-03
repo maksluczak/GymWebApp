@@ -7,37 +7,56 @@ export default function CountryPage() {
     const [countries, setCountries] = useState([]);
     const router = useRouter();
 
-    useEffect(() => {
-        fetchCountries();
-    }, []);
-
     const fetchCountries = async () => {
         try {
-            const res = await fetch('http://localhost:8080/country'); 
+            const res = await fetch('http://localhost:8080/country');
+            if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.message || `HTTP error! ${res.status}`);
+            }
             const data = await res.json();
             setCountries(data);
         } catch (err) {
-            throw new Error('Failed to fetch countries');
+            alert(`Error fetching countries: ${err.message}`);
         }
     };
+
+    useEffect(() => {
+        fetchCountries();
+    }, []);
 
     const handleCountryClick = (id) => {
         router.push(`/city?id=${id}`);
     };
 
     return (
-        <main className="pt-20">
-            <ul className="list-disc pl-5 space-y-1">
-                {countries.map((c) => (
-                <li
-                key={c._id}
-                onClick={() => handleCountryClick(c._id)}
-                className="hover:underline cursor-pointer"
-                >
-                {c.country}
-                </li>
-                ))}
-            </ul>
+        <main className='min-h-screen p-8 mt-20'>
+            <div className='max-w-xl mx-auto bg-white rounded-xl shadow-2xl p-8'>
+                <h1 className='text-4xl font-extrabold text-gray-900 mb-8 text-center border-b-2 pb-4 border-purple-200'>
+                    Wybierz Kraj
+                </h1>
+
+                {countries.length > 0 ? (
+                    <div className='grid grid-cols-1 gap-6'>
+                        {countries.map((c) => (
+                            <div
+                                key={c._id}
+                                onClick={() => handleCountryClick(c._id)}
+                                className="bg-purple-50 p-6 rounded-lg shadow-md border border-purple-100 cursor-pointer transform hover:scale-105 hover:bg-purple-100 transition duration-300 ease-in-out flex items-center justify-between"
+                            >
+                                <p className='text-xl font-semibold text-purple-800'>{c.country}</p>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <p className='text-gray-600 text-center text-lg py-10'>
+                        Brak dostępnych krajów.
+                    </p>
+                )}
+            </div>
         </main>
     );
 }
