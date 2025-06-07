@@ -59,6 +59,7 @@ export default function Dashboard() {
                 await fetchUserWorkouts();
                 await fetchWorkouts();
             } else {
+                // Check if the response provides a specific error message
                 const errorData = await res.json(); 
                 throw new Error(errorData.message || `HTTP error! ${res.status}`);
             }
@@ -78,6 +79,7 @@ export default function Dashboard() {
                 await fetchUserWorkouts();
                 await fetchWorkouts();
             } else {
+                 // Check if the response provides a specific error message
                 const errorData = await res.json(); 
                 throw new Error(errorData.message || `HTTP error! ${res.status}`);
             }
@@ -91,7 +93,7 @@ export default function Dashboard() {
     };
     
     return (
-        <main className='min-h-screen p-8 mt-20'>
+        <main className='min-h-screen bg-white p-8 mt-20'>
             <div className='flex justify-between items-center mb-8'>
                 <h1 className='text-5xl font-extrabold text-gray-900'>
                     Twoje Centrum Treningowe
@@ -105,6 +107,7 @@ export default function Dashboard() {
             </div>
 
             <section className='grid grid-cols-1 md:grid-cols-2 gap-8'>
+                {/* Available Workouts Section */}
                 <div className='bg-white rounded-xl shadow-2xl p-6'>
                     <h2 className='text-3xl font-bold text-gray-800 mb-6 border-b-2 pb-3 border-purple-200'>
                         Dostępne Treningi
@@ -136,6 +139,8 @@ export default function Dashboard() {
                         )}
                     </div>
                 </div>
+
+                {/* User's Workouts Section */}
                 <div className='bg-white rounded-xl shadow-2xl p-6'>
                     <h2 className='text-3xl font-bold text-gray-800 mb-6 border-b-2 pb-3 border-purple-200'>
                         Moje Treningi
@@ -155,7 +160,7 @@ export default function Dashboard() {
                                     </div>
                                     <button 
                                         onClick={() => handleSignOutFromWorkout(userWorkout._id)}
-                                        className='bg-red-500 text-white px-5 py-2 rounded-full font-medium hover:bg-red-600 transition duration-300 ease-in-out'
+                                        className='bg-blue-700 text-white px-5 py-2 rounded-full font-medium hover:bg-blue-800 transition duration-300 ease-in-out'
                                     >
                                         Wypisz się
                                     </button>
